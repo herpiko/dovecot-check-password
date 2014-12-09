@@ -24,9 +24,9 @@ if (typeof(fdOutput) === "string") {
   fdOutput = parseInt(fdOutput);
 }
 
-var notAuthenticated = function () {
+var notAuthenticated = function (message) {
   if (fdOutput == process.env.TESTFDOUT) {
-    console.log("not authenticated" );
+    console.log("not authenticated : "+message );
   }
   process.exit(1);
 }
@@ -55,6 +55,10 @@ var start = function(email, password) {
       domain: domainResult._id,
       state: "active"
     });
+    var taskAlias = User.findOne({
+      alias: username+"@pnsmail.go.id",
+      state: "active"
+    });
     task.exec(function(e, result) {
       var success = function(passOk) {
         if (!passOk) {
@@ -80,7 +84,20 @@ var start = function(email, password) {
           success(passOk);
         }
       } else {
-        notAuthenticated();
+        taskAlias.exec(function(err,res){
+          if (res) {
+            if (res.hash.indexOf("{SSHA}") == 0) {
+              ssha.checkssha(password, res.hash, function(err, passOk) {
+                success(passOk);
+              });
+            } else {
+              var passOk = bcrypt.compareSync(password, res.hash);
+              success(passOk);
+            }
+          } else {
+            notAuthenticated();
+          }
+        });
       }
     });
   });
