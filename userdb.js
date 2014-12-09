@@ -16,18 +16,30 @@ var start = function(email, cb) {
   var domainQuery = Domain.findOne({name:domain});
   domainQuery.exec(function(e, domainResult) {
     var task = User.findOne({domain: domainResult._id, username:username, state: "active"});
+    var taskAlias = User.findOne({
+      alias: username+"@"+domain,
+      state: "active"
+    });
+    var ok = function(data){
+      var arg = {};
+      arg.home = config.home + "/" + username;
+      arg.uid = config.uid;
+      arg.gid = config.gid;
+      arg.user = username;
+      arg.quota_rule = "*:storage=" + data.quota + "M";
+      cb(arg);
+    }
     task.exec(function(e, result) {
       if (result) {
-        var arg = {};
-        arg.home = config.home + "/" + username;
-        arg.uid = config.uid;
-        arg.gid = config.gid;
-        arg.user = username;
-        arg.quota_rule = "*:storage=" + result.quota + "M";
-
-        cb(arg);
+        ok(result);
       } else {
-        return cb(null);
+        taskAlias.exec(function(e, result) {
+          if (result) {
+            ok(result);
+          } else {
+            return cb(null);
+          }
+        });
       }
     });
   });
