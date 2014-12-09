@@ -12,7 +12,7 @@ server.stderr.on("data", function(data) {
 server.on("close", function() {
   console.log("donw");
 });
-server.stdin.write("account@pnsmail.go.id\0password\0");
+server.stdin.write("username@pnsmail.go.id\0password\0");
 server.stdin.end();
 console.log("waiting");
 

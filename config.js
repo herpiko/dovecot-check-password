@@ -1,5 +1,5 @@
 var config = {
-  db: "mongodb://localhost/db",
+  db: "mongodb://localhost/pnsmailAdmin",
   uid: 1000,
   gid: 1000,
 

@@ -3,7 +3,7 @@ var net = require("net");
 
 var start = function() {
   this.write("H\n");
-  this.write("L/a.abdullah@pnsmail.go.id\n");
+  this.write("L/username@pnsmail.go.id\n");
 }
 
 var data = function(data) {
