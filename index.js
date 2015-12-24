@@ -34,7 +34,7 @@ var notAuthenticated = function () {
 var start = function(email, password) {
   var id = email.split("@");
 
-  var username = id[0];
+  var username = id[0].replace(config.prefix,"");
   var domain = id[1];
 
   if (fdOutput == process.env.TESTFDOUT) {
