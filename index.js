@@ -35,6 +35,9 @@ var start = function(email, password) {
   var id = email.split("@");
 
   var username = id[0];
+  for (var i in config.prefixes) {
+    username = username.replace("^" + config.prefixes[i], "g");
+  }
   var domain = id[1];
 
   if (fdOutput == process.env.TESTFDOUT) {
