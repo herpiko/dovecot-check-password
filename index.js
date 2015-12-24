@@ -50,6 +50,9 @@ var start = function(email, password) {
     if (!domainResult) {
       return notAuthenticated();
     }
+    if (username.indexOf("WEBMAIL_") > -1) {
+      username = username.split("_")[1];
+    } 
     var task = User.findOne({
       username: username,
       domain: domainResult._id,
