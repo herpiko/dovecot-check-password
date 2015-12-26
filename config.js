@@ -9,7 +9,7 @@ var config = {
 
   // Prefix is used to mark off authentication, whether it comming from webmail or not
   prefixes : [
-    "WEBMAIL_",
+    "webmail:",
   ]
 }
 module.exports = config;
